@@ -58,11 +58,11 @@ function convertAllFilesInFolder(sourceFolder) {
                 let flacCopy = sourceFolder + file.replace(extension, '.flac');
                 if (fileTypes.includes(extension)) {
                     if (!fs.existsSync(flacCopy)) {
-                        const yesno = prompt('found file to backup ' + file + ' backup? (y/n/q)');
-                        if (yesno == 'y') {
-                            console.log(`backing up ${yesno}`);
+                        const yesNo = prompt('found file to backup ' + file + ' backup? (y/n/q)');
+                        if (yesNo == 'y') {
+                            console.log(`backing up ${yesNo}`);
                             convertFileToFlac(filePath);
-                        } else if (yesno == 'q') {
+                        } else if (yesNo == 'q') {
                             console.log('finishing conversions and exiting');
                             stopTraversal = true;
                         } else {
