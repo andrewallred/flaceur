@@ -31,16 +31,24 @@ function convertFileToFlac(sourceFile) {
         }).run();
 }
 
+let stopTraversal = false;
 function convertAllFilesInFolder(sourceFolder, targetFolder) {
     //passsing directoryPath and callback function
     fs.readdir(sourceFolder, function (err, files) {
         //handling error
         if (err) {
             return console.log('Unable to scan directory: ' + err);
-        } 
+        }
+        if (stopTraversal) {
+            return;
+        }
         //listing all files using forEach
         files.forEach(function (file) {
-            // Do whatever you want to do with the file
+            
+            if (stopTraversal) {
+                return;
+            }
+
             let filePath = sourceFolder + file;        
             if (fs.lstatSync(filePath).isDirectory()) {
                 console.log('found folder ' + filePath);
@@ -55,8 +63,8 @@ function convertAllFilesInFolder(sourceFolder, targetFolder) {
                             console.log(`backing up ${yesno}`);
                             convertFileToFlac(filePath);
                         } else if (yesno == 'q') {
-                            console.log('exiting');
-                            process.exit(0);
+                            console.log('finishing conversions and exiting');
+                            stopTraversal = true;
                         } else {
                             console.log('skipping file');
                         }
