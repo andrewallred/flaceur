@@ -24,7 +24,7 @@ function convertFileToFlac(sourceFile) {
         .audioCodec('copy')
         .output(targetFile)
         .on('end', function(err) {
-        if(!err) { console.log('conversion Done') }
+        if(!err) { console.log(targetFile + ' converted!') }
         })
         .on('error', function(err){
         console.log('error: ', err)
