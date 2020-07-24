@@ -6,7 +6,10 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 const path = require('path');
 const fs = require('fs');
 
-let fileTypes = ['aif', 'aiff', 'wav'];
+const prompt = require('prompt-sync')();
+
+const fileTypes = ['.aif', '.aiff', '.wav'];
+let filesToEncode = [];
 
 function convertFileToFlac(sourceFile, targetFile) {
     ffmpeg(sourceFile)
@@ -37,9 +40,35 @@ function convertAllFilesInFolder(sourceFolder, targetFolder) {
         //listing all files using forEach
         files.forEach(function (file) {
             // Do whatever you want to do with the file
-            console.log(file); 
-        });
-    });
+            let filePath = sourceFolder + file;        
+            if (fs.lstatSync(filePath).isDirectory()) {
+                console.log('found folder ' + filePath);
+                convertAllFilesInFolder(filePath + '/');
+            } else {
+                let extension = path.extname(file);
+                let flacCopy = sourceFolder + file.replace(extension, '.flac');
+                if (fileTypes.includes(extension)) {
+                    if (!fs.existsSync(flacCopy)) {
+                        const yesno = prompt('found file to backup ' + file + ' backup? (y/n/q)');
+                        if (yesno == 'y') {
+                            console.log(`backing up ${yesno}`);
+
+                            //console.log('found file to backup ' + file);                            
+                        } else if (yesno == 'q') {
+                            console.log('exiting');
+                            process.exit(0);
+                        } else {
+                            console.log('skipping file');
+                        }
+                        
+                        
+                    } else {
+                        console.log('found file but backup already exists ' + file);
+                    }
+                }
+            }
+        });        
+    });    
 }
 
 convertAllFilesInFolder('/Users/andrewallred/Desktop/recordings/', '');
