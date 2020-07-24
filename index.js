@@ -11,7 +11,11 @@ const prompt = require('prompt-sync')();
 const fileTypes = ['.aif', '.aiff', '.wav'];
 let filesToEncode = [];
 
-function convertFileToFlac(sourceFile, targetFile) {
+function convertFileToFlac(sourceFile) {
+
+    let extension = path.extname(sourceFile);
+    let targetFile = sourceFile.replace(extension, '.flac');
+
     ffmpeg(sourceFile)
         .noVideo()
         .addOutputOption('-acodec flac')
@@ -26,9 +30,6 @@ function convertFileToFlac(sourceFile, targetFile) {
         console.log('error: ', err)
         }).run();
 }
-
-//convertFileToFlac('/Users/andrewallred/Desktop/recordings/systems1.aif', '/Users/andrewallred/Desktop/recordings/output.flac');
-
 
 function convertAllFilesInFolder(sourceFolder, targetFolder) {
     //passsing directoryPath and callback function
@@ -52,16 +53,13 @@ function convertAllFilesInFolder(sourceFolder, targetFolder) {
                         const yesno = prompt('found file to backup ' + file + ' backup? (y/n/q)');
                         if (yesno == 'y') {
                             console.log(`backing up ${yesno}`);
-
-                            //console.log('found file to backup ' + file);                            
+                            convertFileToFlac(filePath);
                         } else if (yesno == 'q') {
                             console.log('exiting');
                             process.exit(0);
                         } else {
                             console.log('skipping file');
                         }
-                        
-                        
                     } else {
                         console.log('found file but backup already exists ' + file);
                     }
