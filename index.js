@@ -32,7 +32,7 @@ function convertFileToFlac(sourceFile) {
 }
 
 let stopTraversal = false;
-function convertAllFilesInFolder(sourceFolder, targetFolder) {
+function convertAllFilesInFolder(sourceFolder) {
     //passsing directoryPath and callback function
     fs.readdir(sourceFolder, function (err, files) {
         //handling error
@@ -77,4 +77,5 @@ function convertAllFilesInFolder(sourceFolder, targetFolder) {
     });    
 }
 
-convertAllFilesInFolder('/Users/andrewallred/Desktop/recordings/', '');
+const sourceFolder = prompt('please enter the folder to convert: ');
+convertAllFilesInFolder(sourceFolder);
