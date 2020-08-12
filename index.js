@@ -1,6 +1,5 @@
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
+const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg')
 const ffmpeg = require('fluent-ffmpeg')
-ffmpeg.setFfmpegPath(ffmpegPath);
 
 //requiring path and fs modules
 const path = require('path');
@@ -79,5 +78,84 @@ function convertAllFilesInFolder(sourceFolder) {
     });    
 }
 
-const sourceFolder = prompt('please enter the folder to convert: ');
-convertAllFilesInFolder(sourceFolder);
+function traverseFolder(sourceFolder) {
+
+    console.log('traversing ' + sourceFolder);
+
+    //passsing directoryPath and callback function
+    fs.readdir(sourceFolder, function (err, files) {
+        //handling error
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+
+        //listing all files using forEach
+        files.forEach(function (file) {
+            
+            let filePath = sourceFolder + file;
+            let extension = path.extname(file);   
+            if (!(excludedFileTypes.includes(extension) || excludedFileTypes.includes(file)) && fs.lstatSync(filePath).isDirectory()) {
+                console.log('found folder ' + filePath);
+                traverseFolder(filePath + '/');
+            } else {
+                console.log(`found file ${file}`);
+            }
+        });        
+    });    
+}
+
+async function copyFfmpegFromSnapshotToFileSystem(source) {
+    const fs = require('fs');
+    const utils = require('util');
+
+    const copyFile = utils.promisify(fs.copyFile);
+    const chmod = utils.promisify(fs.chmod);
+
+    const target = path.dirname(process.execPath) + '/ffmpeg';
+    console.log(target);
+    
+    async function copy(source, target) {
+        if (process.pkg) {
+            // use stream pipe to reduce memory usage
+            // when loading a large file into memory.
+            console.log('copying to memory ' + source);
+            console.log('writing to disk ' + target);
+            let rs = fs.createReadStream(source);
+            await streamToFile(rs, target);
+            console.log('done copying from memory');
+        } else {
+            await copyFile(source, target);
+        }
+    }
+
+    await copy(source, target); // this should work
+    await chmod(target, 0o765); // maybe need to grant execute permission
+}
+
+const streamToFile = (inputStream, filePath) => {
+    return new Promise((resolve, reject) => {
+      const fileWriteStream = fs.createWriteStream(filePath)
+      inputStream
+        .pipe(fileWriteStream)
+        .on('finish', resolve)
+        .on('error', reject)
+    })
+}
+
+async function run() {    
+
+    if (process.pkg) {        
+        await copyFfmpegFromSnapshotToFileSystem('/snapshot/flaceur/node_modules/@ffmpeg-installer/darwin-x64/ffmpeg');
+
+        console.log('done copying ffmpeg from snapshot');
+        
+        ffmpeg.setFfmpegPath(path.dirname(process.execPath) + '/ffmpeg');
+    } else {
+        ffmpeg.setFfmpegPath(ffmpegInstaller.path);
+    }
+    
+    const sourceFolder = prompt('please enter the folder to convert: ');    
+    convertAllFilesInFolder(sourceFolder);
+}
+
+run();
