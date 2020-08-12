@@ -8,7 +8,8 @@ const fs = require('fs');
 
 const prompt = require('prompt-sync')();
 
-const fileTypes = ['.aif', '.aiff', '.wav'];
+const includedFileTypes = ['.aif', '.aiff', '.wav'];
+const excludedFileTypes = ['.DS_Store'];
 let filesToEncode = [];
 
 function convertFileToFlac(sourceFile) {
@@ -42,6 +43,7 @@ function convertAllFilesInFolder(sourceFolder) {
         if (stopTraversal) {
             return;
         }
+
         //listing all files using forEach
         files.forEach(function (file) {
             
@@ -49,14 +51,14 @@ function convertAllFilesInFolder(sourceFolder) {
                 return;
             }
 
-            let filePath = sourceFolder + file;        
-            if (fs.lstatSync(filePath).isDirectory()) {
+            let filePath = sourceFolder + file;
+            let extension = path.extname(file);   
+            if (!(excludedFileTypes.includes(extension) || excludedFileTypes.includes(file)) && fs.lstatSync(filePath).isDirectory()) {
                 console.log('found folder ' + filePath);
                 convertAllFilesInFolder(filePath + '/');
             } else {
-                let extension = path.extname(file);
                 let flacCopy = sourceFolder + file.replace(extension, '.flac');
-                if (fileTypes.includes(extension)) {
+                if (includedFileTypes.includes(extension)) {
                     if (!fs.existsSync(flacCopy)) {
                         const yesNo = prompt('found file to backup ' + file + ' backup? (y/n/q)');
                         if (yesNo == 'y') {
