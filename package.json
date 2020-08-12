@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": "bin.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,5 +13,9 @@
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "fluent-ffmpeg": "^2.1.2",
     "prompt-sync": "^4.2.0"
+  },
+  "pkg": {
+    "scripts": "node_modules/**/*.js",
+    "assets": "./node_modules/@ffmpeg-installer/darwin-x64/ffmpeg"
   }
 }
