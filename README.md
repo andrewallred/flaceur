@@ -14,7 +14,7 @@ Package flaceur:
 pkg .
 ```
 
-Running pkg will generate three executables in the repository root, flaceur-linux, flaceur-macos, and flaceur-win.exe. The Linux and MacOS files have been compressed and added into the repo. They can be downloaded below.
+Running pkg will generate three executables in the repository root: *flaceur-linux*, *flaceur-macos*, and *flaceur-win.exe*. The Linux and MacOS files have been compressed and added into the repo. They can be downloaded below.
 
 ## Packaged Executables
 
