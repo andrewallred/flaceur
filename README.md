@@ -1,6 +1,6 @@
 # flaceur
 
-Node command line app to convert a folder of audio files to flac. Local development requires installation of ffmpeg.
+Node command line app to convert folders of audio files to flac. Local development requires installation of ffmpeg.
 
 ## Local Development
 
