@@ -77,6 +77,7 @@ function convertAllFilesInFolder(sourceFolder) {
     });    
 }
 
+// debugging tool, not currently in use
 function traverseFolder(sourceFolder) {
 
     console.log('traversing ' + sourceFolder);
@@ -103,6 +104,7 @@ function traverseFolder(sourceFolder) {
     });    
 }
 
+// by copying ffmpeg from snapshot memory to the file system we can avoid requiring the user to install ffmpeg
 async function copyFfmpegFromSnapshotToFileSystem(source) {
     const fs = require('fs');
     const utils = require('util');
@@ -131,6 +133,7 @@ async function copyFfmpegFromSnapshotToFileSystem(source) {
     await chmod(target, 0o765); // maybe need to grant execute permission
 }
 
+// used in copyFfmpegFromSnapshotToFileSystem to copy ffmpeg from snapshot memory onto the file system
 const streamToFile = (inputStream, filePath) => {
     return new Promise((resolve, reject) => {
       const fileWriteStream = fs.createWriteStream(filePath)
