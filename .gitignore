@@ -118,3 +118,9 @@ dist
 executables/flaceur-linux
 
 executables/flaceur-macos
+
+ffmpeg
+
+flaceur-linux
+flaceur-macos
+flaceur-win.exe
