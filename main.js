@@ -9,7 +9,6 @@ const prompt = require('prompt-sync')();
 
 const includedFileTypes = ['.aif', '.aiff', '.wav'];
 const excludedFileTypes = ['.DS_Store'];
-let filesToEncode = [];
 
 function convertFileToFlac(sourceFile) {
 
