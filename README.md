@@ -4,12 +4,12 @@ Node command line app to convert a folder of audio files to flac. Local developm
 
 ## Local Development
 
-To run flaceur:
+Run flaceur:
 ```sh
 node main.js
 ```
 
-To package flaceur:
+Package flaceur:
 ```sh
 pkg .
 ```
