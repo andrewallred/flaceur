@@ -21,6 +21,6 @@ Running pkg will generate three executables in the repository root: *flaceur-lin
 | Platform | Download |
 | :--------- | :----------: |
 | Mac OS | [flaceur-macos](executables/flaceur-macos.zip) |
-| Linux (untested) | [flaceur-macos](executables/flaceur-linux.zip) |
+| Linux (untested) | [flaceur-linux](executables/flaceur-linux.zip) |
 
 ![flaceur](flaneur.jpg) 
