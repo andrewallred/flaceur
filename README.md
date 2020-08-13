@@ -2,6 +2,18 @@
 
 Node command line app to convert a folder of audio files to flac. Local development requires installation of ffmpeg.
 
+## Local Development
+
+To run flaceur:
+```sh
+node main.js
+```
+
+To package flaceur:
+```sh
+pkg .
+```
+
 ## Packaged Executables
 
 | Platform | Download |
