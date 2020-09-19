@@ -60,7 +60,7 @@ function convertAllFilesInFolder(sourceFolder) {
                     if (!fs.existsSync(flacCopy)) {
                         const yesNo = prompt('found file to backup ' + file + ' backup? (y/n/q)');
                         if (yesNo == 'y') {
-                            console.log(`backing up ${yesNo}`);
+                            console.log(`backing up ${file}`);
                             convertFileToFlac(filePath);
                         } else if (yesNo == 'q') {
                             console.log('finishing conversions and exiting');
