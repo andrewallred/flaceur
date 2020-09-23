@@ -59,6 +59,7 @@ function convertAllFilesInFolder(sourceFolder) {
                 if (includedFileTypes.includes(extension)) {
                     if (!fs.existsSync(flacCopy)) {
                         const yesNo = prompt('found file to backup ' + file + ' backup? (y/n/q)');
+                        console.log(yesNo + ' selected');
                         if (yesNo == 'y') {
                             console.log(`backing up ${file}`);
                             convertFileToFlac(filePath);
