@@ -156,7 +156,11 @@ async function run() {
         ffmpeg.setFfmpegPath(ffmpegInstaller.path);
     }
     
-    let sourceFolder = prompt('please enter the folder to convert: ');
+    let sourceFolder = prompt('please enter the folder to convert or press enter to convert the current folder: ');
+
+    if (sourceFolder == null || sourceFolder == '') {  
+        sourceFolder = process.cwd();
+    }
 
     if (sourceFolder.slice(-1) != '/') {
         sourceFolder = sourceFolder + '/';
