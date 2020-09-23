@@ -16,7 +16,7 @@ pkg .
 
 Running pkg will generate three executables in the repository root: *flaceur-linux*, *flaceur-macos*, and *flaceur-win.exe*. The Linux and MacOS files have been compressed and added into the repo. They can be downloaded below.
 
-## Installing flaceur for local use using NPM
+## Installing flaceur for local use with NPM
 
 ```sh
 npm install -g andrewallred/flaceur
