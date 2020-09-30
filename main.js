@@ -10,13 +10,15 @@ const prompt = require('prompt-sync')();
 const includedFileTypes = ['.aif', '.aiff', '.wav'];
 const excludedFileTypes = ['.DS_Store'];
 
-function convertFileToFlac(sourceFile) {
+function convertFileToFlac(sourceFile, targetFile) {
 
     let extension = path.extname(sourceFile);
-    let targetFile = sourceFile.replace(extension, '.flac');
+    if (targetFile == null || targetFile == '') {        
+        targetFile = sourceFile.replace(extension, '.flac');
+    }
 
     ffmpeg(sourceFile)
-        .noVideo()
+        .noVideo()        
         .addOutputOption('-acodec flac')
         .addOutputOption('-compression_level 12')
         .addOutputOption('-lpc_type none')
@@ -30,8 +32,33 @@ function convertFileToFlac(sourceFile) {
         }).run();
 }
 
+function convertFileToWav(sourceFile, targetFile) {
+
+    let extension = path.extname(sourceFile);
+    if (targetFile == null || targetFile == '') {        
+        targetFile = sourceFile.replace(extension, '.wav');
+    }
+
+    ffmpeg(sourceFile)
+        .noVideo()
+        .audioCodec('pcm_s16le')
+        .audioFrequency(44100)
+        .output(targetFile)
+        .on('end', function(err) {
+        if(!err) { console.log(targetFile + ' converted!') }
+        })
+        .on('error', function(err){
+        console.log('error: ', err)
+        }).run();
+}
+
 let stopTraversal = false;
-function convertAllFilesInFolder(sourceFolder) {
+function convertAllFilesInFolder(sourceFolder, targetFolder, type) {
+
+    if (targetFolder == null || targetFolder == '') {
+        sourceFolder = targetFolder;
+    }
+
     //passsing directoryPath and callback function
     fs.readdir(sourceFolder, function (err, files) {
         //handling error
@@ -41,6 +68,8 @@ function convertAllFilesInFolder(sourceFolder) {
         if (stopTraversal) {
             return;
         }
+
+        let yesNo = null;
 
         //listing all files using forEach
         files.forEach(function (file) {
@@ -53,16 +82,34 @@ function convertAllFilesInFolder(sourceFolder) {
             let extension = path.extname(file);   
             if (!(excludedFileTypes.includes(extension) || excludedFileTypes.includes(file)) && fs.lstatSync(filePath).isDirectory()) {
                 console.log('found folder ' + filePath);
-                convertAllFilesInFolder(filePath + '/');
+                convertAllFilesInFolder(filePath + '/', type);
             } else {
-                let flacCopy = sourceFolder + file.replace(extension, '.flac');
+                let fileExtension = null;
+                if (type == 'f') {
+                    fileExtension = '.flac';
+                } else if (type == 'w') {
+                    fileExtension = '.wav';
+                } else {
+                    console.log('unrecognized type: ' + type);
+                }
+
+                let fileCopy = targetFolder + file.replace(extension, fileExtension);
                 if (includedFileTypes.includes(extension)) {
-                    if (!fs.existsSync(flacCopy)) {
-                        const yesNo = prompt('found file to backup ' + file + ' backup? (y/n/q)');
+                    if (!fs.existsSync(fileCopy)) {
+                        if (yesNo != 'a') {
+                            yesNo = prompt('found file to backup ' + file + ' backup? (y/n/a/q)');
+                        }
                         console.log(yesNo + ' selected');
-                        if (yesNo == 'y') {
+                        if (yesNo == 'y' || yesNo == 'a') {
                             console.log(`backing up ${file}`);
-                            convertFileToFlac(filePath);
+                            if (type == 'f') {
+                                convertFileToFlac(filePath, fileCopy);
+                            } else if (type == 'w') {
+                                convertFileToWav(filePath, fileCopy);
+                            } else {
+                                console.log('unrecognized type: ' + type);
+                            }
+                            
                         } else if (yesNo == 'q') {
                             console.log('finishing conversions and exiting');
                             stopTraversal = true;
@@ -167,7 +214,44 @@ async function run() {
         sourceFolder = sourceFolder + '/';
     }
 
-    convertAllFilesInFolder(sourceFolder);
+    let targetFolder = prompt('please enter the target to save files to or press enter to use the source folder: ');
+
+    if (targetFolder == null || targetFolder == '') {  
+        targetFolder = sourceFolder;
+    }
+
+    if (targetFolder.slice(-1) != '/') {
+        targetFolder = targetFolder + '/';
+    }
+
+    let type = prompt('flac or wav? (f/w) ');
+    if (type == 'f' || type == 'w') {
+        convertAllFilesInFolder(sourceFolder, targetFolder, type);    
+    } else {
+        console.log('unrecognized type: ' + type);
+    }
+    
+}
+
+async function test() {    
+
+    if (process.pkg) {        
+        await copyFfmpegFromSnapshotToFileSystem('/snapshot/flaceur/node_modules/@ffmpeg-installer/darwin-x64/ffmpeg');
+
+        console.log('done copying ffmpeg from snapshot');
+        
+        ffmpeg.setFfmpegPath(path.dirname(process.execPath) + '/ffmpeg');
+    } else {
+        ffmpeg.setFfmpegPath(ffmpegInstaller.path);
+    }
+    
+    let sourceFolder = '/Users/allrea/Desktop/field recordings/revive/BellsTest/';
+
+    let targetFolder = '/Users/allrea/Desktop/field recordings/revive/Bells2';
+
+    let type = 'w';
+    convertAllFilesInFolder(sourceFolder, targetFolder, type);    
+    
 }
 
 run();
