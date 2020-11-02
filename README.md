@@ -18,6 +18,12 @@ Running pkg will generate three executables in the repository root: *flaceur-lin
 
 ## Installing flaceur for local use with NPM
 
+To get the latest published version:
+```sh
+npm install -g flaceur
+```
+
+To get the most up-to-date version:
 ```sh
 npm install -g andrewallred/flaceur
 ```
