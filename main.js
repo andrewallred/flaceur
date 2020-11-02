@@ -7,7 +7,7 @@ const fs = require('fs');
 
 const prompt = require('prompt-sync')();
 
-const includedFileTypes = ['.aif', '.aiff', '.wav'];
+const includedFileTypes = ['.aif', '.aiff', '.wav', '.flac'];
 const excludedFileTypes = ['.DS_Store'];
 
 function convertFileToFlac(sourceFile, targetFile) {
