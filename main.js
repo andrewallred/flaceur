@@ -94,7 +94,7 @@ function convertAllFilesInFolder(sourceFolder, targetFolder, type) {
                 }
 
                 let fileCopy = targetFolder + file.replace(extension, fileExtension);
-                if (includedFileTypes.includes(extension)) {
+                if (includedFileTypes.includes(extension.toLowerCase())) {
                     if (!fs.existsSync(fileCopy)) {
                         if (yesNo != 'a') {
                             yesNo = prompt('found file to backup ' + file + ' backup? (y/n/a/q)');
