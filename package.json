@@ -1,6 +1,6 @@
 {
   "name": "flaceur",
-  "version": "1.0.0",
+  "version": "1.0.01",
   "description": "",
   "main": "main.js",
   "bin": "bin.js",
@@ -17,6 +17,9 @@
   },
   "pkg": {
     "scripts": "node_modules/**/*.js",
-    "assets": "./node_modules/@ffmpeg-installer/darwin-x64/ffmpeg"
+    "assets": "./node_modules/@ffmpeg-installer/darwin-x64/ffmpeg",
+    "targets": [
+      "node14"
+    ]
   }
 }
