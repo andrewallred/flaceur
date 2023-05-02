@@ -1,3 +1,5 @@
+var pjson = require('./package.json');
+
 const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg')
 const ffmpeg = require('fluent-ffmpeg')
 
@@ -192,7 +194,15 @@ const streamToFile = (inputStream, filePath) => {
     })
 }
 
-async function run() {    
+async function run() {
+    
+    console.log('  _____.__                                    ');
+    console.log('_/ ____\\  | _____    ____  ____  __ _________ ');
+    console.log('\\   __\\|  | \\__  \\ _/ ___\\/ __ \\|  |  \\_  __ \\');
+    console.log(' |  |  |  |__/ __ \\\\  \\__\\  ___/|  |  /|  | \\/');
+    console.log(' |__|  |____(____  /\\___  >___  >____/ |__|   ');
+    console.log('                 \\/     \\/    \\/              ');
+    console.log('version: ' + pjson.version);
 
     if (process.pkg) {        
         await copyFfmpegFromSnapshotToFileSystem('/snapshot/flaceur/node_modules/@ffmpeg-installer/darwin-x64/ffmpeg');
