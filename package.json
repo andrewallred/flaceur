@@ -1,6 +1,6 @@
 {
   "name": "flaceur",
-  "version": "1.0.01",
+  "version": "1.0.02",
   "description": "",
   "main": "main.js",
   "bin": "bin.js",
