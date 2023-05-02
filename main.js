@@ -213,8 +213,16 @@ async function run() {
     } else {
         ffmpeg.setFfmpegPath(ffmpegInstaller.path);
     }
+
+    console.log('press q to quit at any time');
+
+    console.log('');
     
     let sourceFolder = prompt('please enter the folder to convert or press enter to convert the current folder: ');
+
+    if (sourceFolder == 'q') {
+        process.exit(0);
+    }
 
     if (sourceFolder == null || sourceFolder == '') {  
         sourceFolder = process.cwd();
@@ -226,6 +234,10 @@ async function run() {
 
     let targetFolder = prompt('please enter the target to save files to or press enter to use the source folder: ');
 
+    if (targetFolder == 'q') {
+        process.exit(0);
+    }
+
     if (targetFolder == null || targetFolder == '') {  
         targetFolder = sourceFolder;
     }
@@ -235,6 +247,11 @@ async function run() {
     }
 
     let type = prompt('flac or wav? (f/w) ');
+
+    if (prompt == 'q') {
+        process.exit(0);
+    }
+
     if (type == 'f' || type == 'w') {
         convertAllFilesInFolder(sourceFolder, targetFolder, type);    
     } else {
