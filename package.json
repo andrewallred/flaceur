@@ -17,9 +17,6 @@
   },
   "pkg": {
     "scripts": "node_modules/**/*.js",
-    "assets": "./node_modules/@ffmpeg-installer/darwin-x64/ffmpeg",
-    "targets": [
-      "node14"
-    ]
+    "assets": "./node_modules/@ffmpeg-installer/darwin-x64/ffmpeg"
   }
 }
